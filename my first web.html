@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colorful Shop</title>
+  <style>
+    :root {
+      --primary-color: #ff6f61;
+      --accent-color: #4bcffa;
+      --bg-color: #f1f2f6;
+      --text-color: #2f3542;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .cart-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: white;
+      color: var(--primary-color);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero {
+      background-color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .hero h1 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+      gap: 1rem;
+      padding: 1rem;
+      box-shadow: rgba(red, green, blue, alpha);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .product-info h4 {
+      margin-bottom: 0.5rem;
+    }
+
+    .product-info button {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .product-info button:hover {
+      background-color: #28a4c9;
+    }
+
+    .cart {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+      padding: 1rem;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .cart h3 {
+      margin-bottom: 1rem;
+    }
+
+    .cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-total {
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #dcdde1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SURE DEALS ON QUICK</h1>
+    <p>Bright deals for a better life!</p>
+    <button class="cart-button" onclick="toggleCart()">Cart (<span id="cart-count">0</span>)</button>
+  </header>
+
+  <section class="hero">
+    <h1>Welcome to Our Store!</h1>
+    <p>Discover amazing products below</p>
+  </section>
+
+  <section class="products">
+    <div class="product">
+      <img src="images/Nike Air Force.jpg" alt="Product 1" />
+      <div class="product-info">
+        <h4>Product One</h4>
+        <p>$41.559</p>
+        <button onclick="addToCart('Product One', 41.559)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product">
+      <img src="images/Nike Air Outfit  Shoes.jpg" alt="Product 2" />
+      <div class="product-info">
+        <h4>Product Two</h4>
+        <p>$48.99</p>
+        <button onclick="addToCart('Product Two', 48.99)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="product">
+      <img src="images/Red White Custom Air Force 1.jpg" alt="Product 3" />
+      <div class="product-info">
+        <h4>Product Three</h4>
+        <p>$39.99</p>
+        <button onclick="addToCart('Product Three', 39.99)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="cart" id="cart">
+    <h3>Your Cart</h3>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-total" id="cart-total">Total: $0.00</div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Copyright quik deals on sale Shop @briankigozi. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let cart = {};
+
+    function toggleCart() {
+      const cartElement = document.getElementById('cart');
+      cartElement.style.display = cartElement.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function addToCart(name, price) {
+      if (!cart[name]) {
+        cart[name] = { price, quantity: 1 };
+      } else {
+        cart[name].quantity++;
+      }
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartItems = document.getElementById('cart-items');
+      const cartCount = document.getElementById('cart-count');
+      const cartTotal = document.getElementById('cart-total');
+      cartItems.innerHTML = '';
+
+      let totalItems = 0;
+      let totalPrice = 0;
+
+      for (const [name, item] of Object.entries(cart)) {
+        totalItems += item.quantity;
+        totalPrice += item.quantity * item.price;
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${name} x${item.quantity}</span>
+            <span>$${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+        `;
+      }
+
+      cartCount.textContent = totalItems;
+      cartTotal.textContent = `Total: $${totalPrice.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
+
